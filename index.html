@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Powerlifting Overlay</title>
+    <style>
+      /* Early paint for OBS — before JS/CSS bundles load */
+      html.overlay-mode,
+      html.overlay-mode body,
+      html.overlay-mode #root {
+        background: transparent !important;
+        background-color: rgba(0, 0, 0, 0) !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+      }
+    </style>
+    <script>
+      if (location.hash.indexOf("/overlay") !== -1) {
+        document.documentElement.classList.add("overlay-mode");
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
