@@ -107,35 +107,33 @@ export function AdminPage(): React.JSX.Element {
       <div className="min-h-screen bg-background text-foreground">
         <AdminHeader onAddAthlete={handleOpenCreate} />
 
-        <main className="mx-auto max-w-7xl p-6">
+        <main className="mx-auto w-full max-w-[1600px] p-6">
           <Tabs defaultValue="control" className="gap-4">
             <TabsList variant="line" className="w-full justify-start">
               <TabsTrigger value="control">Control</TabsTrigger>
               <TabsTrigger value="preview">Overlay Preview</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="control" className="grid gap-4 xl:grid-cols-[1.6fr_1fr]">
-              <div className="grid min-w-0 grid-cols-1 gap-4 self-start">
+            <TabsContent value="control" className="grid gap-4">
+              <div className="grid min-w-0 gap-4 xl:grid-cols-[1.4fr_1fr]">
                 <CompetitionSettings />
-                <AthleteTable
-                  athletes={athletes}
-                  currentLift={currentLift}
-                  currentAttemptNumber={currentAttemptNumber}
-                  competitionFormat={competitionFormat}
-                  activeAthleteId={activeAthleteId}
-                  activePlatform={activePlatform}
-                  activeFlight={activeFlight}
-                  onEdit={handleEdit}
-                  onDelete={setDeletingAthlete}
-                  onPutOnScreen={putAthleteOnScreen}
-                  onMoveAthlete={moveAthlete}
-                  onSortByWeight={sortActiveFlightByWeight}
-                />
+                <LiveDeck />
               </div>
 
-              <aside className="grid min-w-0 grid-cols-1 gap-4 self-start">
-                <LiveDeck />
-              </aside>
+              <AthleteTable
+                athletes={athletes}
+                currentLift={currentLift}
+                currentAttemptNumber={currentAttemptNumber}
+                competitionFormat={competitionFormat}
+                activeAthleteId={activeAthleteId}
+                activePlatform={activePlatform}
+                activeFlight={activeFlight}
+                onEdit={handleEdit}
+                onDelete={setDeletingAthlete}
+                onPutOnScreen={putAthleteOnScreen}
+                onMoveAthlete={moveAthlete}
+                onSortByWeight={sortActiveFlightByWeight}
+              />
             </TabsContent>
 
             <TabsContent value="preview">

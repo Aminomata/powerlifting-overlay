@@ -60,7 +60,17 @@ export function AthleteTable({
         </Button>
       }
     >
-      <Table>
+      <Table className="table-fixed">
+        <colgroup>
+          <col className="w-28" />
+          <col />
+          <col className="w-24" />
+          <col className="w-28" />
+          <col className="w-28" />
+          <col className="w-28" />
+          <col className="w-28" />
+          <col className="w-36" />
+        </colgroup>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             {COLUMNS.map((column) => {
