@@ -126,6 +126,7 @@ export function CompetitionSettings(): React.JSX.Element {
       </div>
 
       <p className="mt-3 truncate font-mono text-[11px] text-muted-foreground">{OBS_OVERLAY_URL}</p>
+      <p className="mt-1 text-[11px] text-muted-foreground">{t("competition.lanHint")}</p>
     </AdminPanel>
   );
 }

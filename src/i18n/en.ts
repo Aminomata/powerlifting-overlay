@@ -26,6 +26,7 @@ export const en: Messages = {
   "competition.format": "Format: {label}",
   "competition.copyObsUrl": "Copy OBS URL",
   "competition.urlCopied": "URL copied",
+  "competition.lanHint": "Remote OBS on the same Wi‑Fi: http://<this-PC-IP>:4567/#/overlay (ipconfig → IPv4). Allow TCP 4567 in Windows Firewall if needed.",
 
   "live.title": "Live Control",
   "live.hideOverlay": "Hide Overlay",

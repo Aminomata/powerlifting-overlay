@@ -11,7 +11,7 @@ export type StateListener = (state: CompetitionState) => void;
 
 export const overlaySyncService = {
   async fetchState(): Promise<CompetitionState> {
-    const response = await fetch(`${API_ORIGIN}/api/state`);
+    const response = await fetch(`${apiOrigin()}/api/state`);
     if (!response.ok) {
       throw new Error(`Failed to load competition state (${response.status})`);
     }
@@ -19,7 +19,7 @@ export const overlaySyncService = {
   },
 
   connect(onState: StateListener): () => void {
-    const source = new EventSource(`${API_ORIGIN}/api/events`);
+    const source = new EventSource(`${apiOrigin()}/api/events`);
 
     const handleState = (event: MessageEvent<string>): void => {
       try {

@@ -5,7 +5,7 @@ Local desktop app (**Tauri v2 + React + Vite + TypeScript + Tailwind CSS v4 + sh
 ## Architecture
 
 - **Admin window** (`#/` inside Tauri): the native control room (athletes, attempts, live controls).
-- **Local HTTP server** embedded in Rust on `127.0.0.1:4567`:
+- **Local HTTP server** embedded in Rust on `0.0.0.0:4567` (reachable on localhost and the LAN):
   - serves the frontend to OBS;
   - exposes `GET /api/state` and `GET /api/events` (SSE) to keep the overlay in sync in real time.
 - **OBS overlay** (`#/overlay`): transparent lower-third, fed only through HTTP/SSE.
@@ -15,6 +15,7 @@ Admin (Tauri invoke) → CompetitionState (Rust Mutex)
                     → competition_data.json (app data)
                     → SSE broadcast
 OBS Browser Source → http://localhost:4567/#/overlay
+                  or http://<LAN-IP>:4567/#/overlay (another PC on the same Wi‑Fi)
 ```
 
 ## Prerequisites (development)
@@ -60,7 +61,7 @@ The target PC **does not need Node.js**. WebView2 is required (preinstalled on r
 
 1. Start **Powerlifting Overlay** (`npm run tauri dev` or the executable).
 2. In OBS: **Sources → Add → Browser**.
-3. URL: `http://localhost:4567/#/overlay`
+3. URL: `http://localhost:4567/#/overlay` (same machine), or `http://<LAN-IP>:4567/#/overlay` if OBS runs on another PC on the same Wi‑Fi.
 4. Width / height: `1920` × `1080` (or your canvas resolution).
 5. Paste this into the Browser source's **Custom CSS** field:
 
@@ -72,6 +73,10 @@ body { background-color: rgba(0, 0, 0, 0) !important; margin: 0px auto; overflow
 7. In the control room: **Copy OBS URL**, then **Put on screen** or the athlete navigation buttons.
 
 > In development, the `:4567` server proxies Vite (port `5177`) so OBS always gets up-to-date CSS. Restart `tauri dev` if the overlay shows up unstyled.
+
+### Same Wi‑Fi (OBS on another computer)
+
+No DNS or DHCP changes are required. On the admin PC, run `ipconfig` and use the IPv4 address (e.g. `192.168.1.42`). Point OBS at `http://192.168.1.42:4567/#/overlay`. If the page does not load, allow inbound TCP **4567** for Private networks in Windows Firewall on the admin PC. Guest / client-isolation Wi‑Fi can block device-to-device traffic — use a normal private LAN if that happens.
 
 ## Data
 

@@ -37,6 +37,7 @@ export type Messages = {
   "competition.format": string;
   "competition.copyObsUrl": string;
   "competition.urlCopied": string;
+  "competition.lanHint": string;
 
   "live.title": string;
   "live.hideOverlay": string;
