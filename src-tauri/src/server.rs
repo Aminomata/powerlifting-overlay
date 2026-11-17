@@ -13,7 +13,7 @@ use std::io::Write;
 #[cfg(debug_assertions)]
 use std::net::TcpStream;
 
-const BIND_ADDR: &str = "127.0.0.1:4567";
+const BIND_ADDR: &str = "0.0.0.0:4567";
 const VITE_DEV_ORIGIN: &str = "http://localhost:5177";
 
 pub struct SseBroadcaster {

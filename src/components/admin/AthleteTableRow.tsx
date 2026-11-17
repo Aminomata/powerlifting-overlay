@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { ATTEMPT_STATUS_LABELS, type Athlete, type Attempt, type AttemptStatus } from "../../types/athlete";
+import { useT } from "../../i18n";
+import type { Athlete, Attempt, AttemptStatus } from "../../types/athlete";
 import type { CompetitionFormat, LiftType } from "../../types/competition";
 import { athleteTotal, formatWeight, getAttemptsForLift } from "../../utils/liftingLogic";
 
@@ -12,6 +13,12 @@ const STATUS_TONE: Record<AttemptStatus, string> = {
   pending: "text-muted-foreground",
   goodLift: "text-success",
   noLift: "text-destructive",
+};
+
+const STATUS_KEYS: Record<AttemptStatus, "status.pending" | "status.goodLift" | "status.noLift"> = {
+  pending: "status.pending",
+  goodLift: "status.goodLift",
+  noLift: "status.noLift",
 };
 
 interface AthleteTableRowProps {
@@ -43,6 +50,7 @@ export function AthleteTableRow({
   onMoveUp,
   onMoveDown,
 }: AthleteTableRowProps): React.JSX.Element {
+  const t = useT();
   const attempts = getAttemptsForLift(athlete, currentLift);
 
   return (
@@ -56,10 +64,10 @@ export function AthleteTableRow({
       <TableCell className="px-4 py-3">
         <div className="flex items-center gap-1">
           <span className="w-6 text-sm font-semibold tabular-nums text-muted-foreground">{athlete.lot}</span>
-          <RowAction label="Move up" disabled={!canMoveUp} onClick={onMoveUp}>
+          <RowAction label={t("athletes.moveUp")} disabled={!canMoveUp} onClick={onMoveUp}>
             <ChevronUp />
           </RowAction>
-          <RowAction label="Move down" disabled={!canMoveDown} onClick={onMoveDown}>
+          <RowAction label={t("athletes.moveDown")} disabled={!canMoveDown} onClick={onMoveDown}>
             <ChevronDown />
           </RowAction>
         </div>
@@ -69,7 +77,9 @@ export function AthleteTableRow({
           <span className={cn("font-semibold", isActive && "text-primary")}>
             {athlete.firstName} {athlete.lastName}
           </span>
-          {isActive && <Badge className="rounded-md font-bold tracking-wider uppercase">Live</Badge>}
+          {isActive && (
+            <Badge className="rounded-md font-bold tracking-wider uppercase">{t("athletes.live")}</Badge>
+          )}
         </div>
         <div className="text-xs text-muted-foreground">{athlete.club}</div>
       </TableCell>
@@ -92,16 +102,16 @@ export function AthleteTableRow({
       <TableCell className="px-4 py-3">
         <div className="flex items-center gap-1.5">
           <RowAction
-            label="Put on screen"
+            label={t("athletes.putOnScreen")}
             className="text-primary hover:text-primary"
             onClick={() => onPutOnScreen(athlete.id)}
           >
             <MonitorPlay />
           </RowAction>
-          <RowAction label="Edit" onClick={() => onEdit(athlete)}>
+          <RowAction label={t("athletes.edit")} onClick={() => onEdit(athlete)}>
             <Pencil />
           </RowAction>
-          <RowAction label="Delete" variant="destructive" onClick={() => onDelete(athlete)}>
+          <RowAction label={t("athletes.delete")} variant="destructive" onClick={() => onDelete(athlete)}>
             <Trash2 />
           </RowAction>
         </div>
@@ -119,6 +129,8 @@ function AttemptCell({
   isCurrent: boolean;
   isLiveAthlete: boolean;
 }): React.JSX.Element {
+  const t = useT();
+
   return (
     <div
       className={cn(
@@ -131,7 +143,7 @@ function AttemptCell({
       <div className={cn("font-medium", isCurrent && "font-bold text-foreground")}>
         {formatWeight(attempt.weight)}
       </div>
-      <div className="text-[10px] tracking-wide uppercase">{ATTEMPT_STATUS_LABELS[attempt.status]}</div>
+      <div className="text-[10px] tracking-wide uppercase">{t(STATUS_KEYS[attempt.status])}</div>
     </div>
   );
 }

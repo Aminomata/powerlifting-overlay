@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 import { tauriService } from "../services/tauriService";
 import type { Athlete, AthleteDraft, AttemptStatus } from "../types/athlete";
-import type { CompetitionFormat, CompetitionState, LiftType } from "../types/competition";
+import type { CompetitionFormat, CompetitionState, LiftType, Locale } from "../types/competition";
 import { buildFlightLabels, buildPlatformLabels, clampLabel } from "../utils/labels";
 import {
   advanceToNextLifter,
@@ -27,6 +27,7 @@ interface CompetitionActions {
   hydrateFromBackend: () => Promise<void>;
   replaceState: (state: CompetitionState) => void;
   setCompetitionName: (competitionName: string) => Promise<void>;
+  setLocale: (locale: Locale) => Promise<void>;
   setCompetitionFormat: (competitionFormat: CompetitionFormat) => Promise<void>;
   setCurrentLift: (currentLift: LiftType) => Promise<void>;
   setPlatformCount: (count: number) => Promise<void>;
@@ -91,6 +92,10 @@ export const useCompetitionStore = create<CompetitionStore>((set, get) => {
 
     async setCompetitionName(competitionName) {
       await commit({ ...current(), competitionName });
+    },
+
+    async setLocale(locale) {
+      await commit({ ...current(), locale });
     },
 
     async setCompetitionFormat(competitionFormat) {

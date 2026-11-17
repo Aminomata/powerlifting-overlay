@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import { LowerThirdOverlay } from "../components/overlay/LowerThirdOverlay";
+import { applyDocumentLang, useLocale } from "../i18n";
 import { overlaySyncService } from "../services/overlaySyncService";
 import { useCompetitionSnapshot, useCompetitionStore } from "../store/useCompetitionStore";
 
 export function OverlayPage(): React.JSX.Element {
   const replaceState = useCompetitionStore((s) => s.replaceState);
+  const locale = useLocale();
   const state = useCompetitionSnapshot();
   const athlete = state.athletes.find((item) => item.id === state.activeAthleteId) ?? null;
+
+  useEffect(() => {
+    applyDocumentLang(locale);
+  }, [locale]);
 
   useEffect(() => {
     let unsubscribe = (): void => undefined;

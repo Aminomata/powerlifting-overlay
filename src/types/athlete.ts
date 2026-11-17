@@ -1,11 +1,5 @@
 export type AttemptStatus = "pending" | "goodLift" | "noLift";
 
-export const ATTEMPT_STATUS_LABELS: Record<AttemptStatus, string> = {
-  pending: "Pending",
-  goodLift: "Good Lift",
-  noLift: "No Lift",
-};
-
 export interface Attempt {
   weight: number;
   status: AttemptStatus;

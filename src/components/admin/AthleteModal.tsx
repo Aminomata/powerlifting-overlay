@@ -8,19 +8,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useLocale, useT, type MessageKey } from "../../i18n";
 import { createAthleteDraft } from "../../store/useCompetitionStore";
 import type { Athlete, AthleteDraft, Attempt, AttemptStatus } from "../../types/athlete";
 import { liftsForFormat, type CompetitionFormat, type LiftType } from "../../types/competition";
+import { toFlightSelectOptions, toPlatformSelectOptions } from "../../utils/labels";
 import { AttemptFields } from "./AttemptFields";
-import { InputField, SelectField, toSelectOptions } from "./FormFields";
+import { InputField, SelectField } from "./FormFields";
 
 type TextFieldName = "firstName" | "lastName" | "club" | "weightClass";
 
-const TEXT_FIELDS: { name: TextFieldName; label: string; required?: boolean }[] = [
-  { name: "firstName", label: "First Name", required: true },
-  { name: "lastName", label: "Last Name", required: true },
-  { name: "club", label: "Club" },
-  { name: "weightClass", label: "Weight Class" },
+const TEXT_FIELDS: { name: TextFieldName; labelKey: MessageKey; required?: boolean }[] = [
+  { name: "firstName", labelKey: "athleteModal.firstName", required: true },
+  { name: "lastName", labelKey: "athleteModal.lastName", required: true },
+  { name: "club", labelKey: "athleteModal.club" },
+  { name: "weightClass", labelKey: "athleteModal.weightClass" },
 ];
 
 interface AthleteModalProps {
@@ -46,6 +48,8 @@ export function AthleteModal({
   onClose,
   onSave,
 }: AthleteModalProps): React.JSX.Element {
+  const t = useT();
+  const locale = useLocale();
   const [draft, setDraft] = useState<AthleteDraft>(createAthleteDraft(defaultPlatform, defaultFlight));
   const [saving, setSaving] = useState(false);
 
@@ -120,15 +124,17 @@ export function AthleteModal({
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <form onSubmit={handleSubmit} className="grid gap-4">
           <DialogHeader>
-            <DialogTitle className="text-lg">{athlete ? "Edit Athlete" : "Add Athlete"}</DialogTitle>
-            <DialogDescription>Identity, platform, flight and planned attempts.</DialogDescription>
+            <DialogTitle className="text-lg">
+              {athlete ? t("athleteModal.editTitle") : t("athleteModal.addTitle")}
+            </DialogTitle>
+            <DialogDescription>{t("athleteModal.description")}</DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-3 md:grid-cols-2">
             {TEXT_FIELDS.map((field) => (
               <InputField
                 key={field.name}
-                label={field.label}
+                label={t(field.labelKey)}
                 name={field.name}
                 value={draft[field.name]}
                 required={field.required}
@@ -136,15 +142,15 @@ export function AthleteModal({
               />
             ))}
             <SelectField
-              label="Platform"
+              label={t("athleteModal.platform")}
               value={draft.platform}
-              options={toSelectOptions(platforms)}
+              options={toPlatformSelectOptions(platforms, locale)}
               onValueChange={handlePlatformChange}
             />
             <SelectField
-              label="Flight"
+              label={t("athleteModal.flight")}
               value={draft.flight}
-              options={toSelectOptions(flights)}
+              options={toFlightSelectOptions(flights, locale)}
               onValueChange={handleFlightChange}
             />
           </div>
@@ -161,10 +167,10 @@ export function AthleteModal({
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
+              {t("athleteModal.cancel")}
             </Button>
             <Button type="submit" disabled={saving}>
-              {saving ? "Saving…" : "Save"}
+              {saving ? t("athleteModal.saving") : t("athleteModal.save")}
             </Button>
           </DialogFooter>
         </form>

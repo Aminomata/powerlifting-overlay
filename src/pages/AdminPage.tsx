@@ -10,10 +10,12 @@ import { CompetitionSettings } from "../components/admin/CompetitionSettings";
 import { DeleteAthleteDialog } from "../components/admin/DeleteAthleteDialog";
 import { LiveDeck } from "../components/admin/LiveDeck";
 import { OverlayPreview } from "../components/admin/OverlayPreview";
+import { useT } from "../i18n";
 import { useCompetitionStore } from "../store/useCompetitionStore";
 import type { Athlete } from "../types/athlete";
 
 export function AdminPage(): React.JSX.Element {
+  const t = useT();
   const {
     hydrated,
     athletes,
@@ -110,8 +112,8 @@ export function AdminPage(): React.JSX.Element {
         <main className="mx-auto w-full max-w-[1600px] p-6">
           <Tabs defaultValue="control" className="gap-4">
             <TabsList variant="line" className="w-full justify-start">
-              <TabsTrigger value="control">Control</TabsTrigger>
-              <TabsTrigger value="preview">Overlay Preview</TabsTrigger>
+              <TabsTrigger value="control">{t("tabs.control")}</TabsTrigger>
+              <TabsTrigger value="preview">{t("tabs.preview")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="control" className="grid gap-4">

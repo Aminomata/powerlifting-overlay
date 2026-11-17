@@ -1,18 +1,27 @@
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useLocale, useT } from "../../i18n";
 import { useCompetitionStore } from "../../store/useCompetitionStore";
-import {
-  FORMAT_LABELS,
-  LIFT_LABELS,
-  OBS_OVERLAY_URL,
-  liftsForFormat,
-  type CompetitionFormat,
-} from "../../types/competition";
+import { OBS_OVERLAY_URL, liftsForFormat, type CompetitionFormat, type LiftType } from "../../types/competition";
+import { toFlightSelectOptions, toPlatformSelectOptions } from "../../utils/labels";
 import { AdminPanel } from "./AdminPanel";
-import { InputField, SelectField, toSelectOptions } from "./FormFields";
+import { InputField, SelectField } from "./FormFields";
+
+const LIFT_KEYS: Record<LiftType, "lift.squat" | "lift.bench" | "lift.deadlift"> = {
+  squat: "lift.squat",
+  bench: "lift.bench",
+  deadlift: "lift.deadlift",
+};
+
+const FORMAT_KEYS: Record<CompetitionFormat, "format.sbd" | "format.benchOnly"> = {
+  sbd: "format.sbd",
+  benchOnly: "format.benchOnly",
+};
 
 export function CompetitionSettings(): React.JSX.Element {
+  const t = useT();
+  const locale = useLocale();
   const competitionName = useCompetitionStore((s) => s.competitionName);
   const competitionFormat = useCompetitionStore((s) => s.competitionFormat);
   const currentLift = useCompetitionStore((s) => s.currentLift);
@@ -29,7 +38,10 @@ export function CompetitionSettings(): React.JSX.Element {
   const setActiveFlight = useCompetitionStore((s) => s.setActiveFlight);
   const [copied, setCopied] = useState(false);
 
-  const liftOptions = liftsForFormat(competitionFormat).map((lift) => ({ value: lift, label: LIFT_LABELS[lift] }));
+  const liftOptions = liftsForFormat(competitionFormat).map((lift) => ({
+    value: lift,
+    label: t(LIFT_KEYS[lift]),
+  }));
 
   function handleNameChange(event: React.ChangeEvent<HTMLInputElement>): void {
     void setCompetitionName(event.target.value);
@@ -56,35 +68,35 @@ export function CompetitionSettings(): React.JSX.Element {
 
   return (
     <AdminPanel
-      title="Competition"
+      title={t("competition.title")}
       action={
         <>
           <Button variant="outline" size="sm" onClick={handleFormatToggle}>
-            Format: {FORMAT_LABELS[competitionFormat]}
+            {t("competition.format", { label: t(FORMAT_KEYS[competitionFormat]) })}
           </Button>
           <Button variant="outline" size="sm" onClick={handleCopyUrl}>
             {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
-            {copied ? "URL copied" : "Copy OBS URL"}
+            {copied ? t("competition.urlCopied") : t("competition.copyObsUrl")}
           </Button>
         </>
       }
     >
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         <InputField
-          label="Competition Name"
+          label={t("competition.name")}
           value={competitionName}
           onChange={handleNameChange}
           className="md:col-span-2 xl:col-span-1"
         />
         <SelectField
-          label="Current Lift"
+          label={t("competition.currentLift")}
           value={currentLift}
           options={liftOptions}
           disabled={competitionFormat === "benchOnly"}
           onValueChange={setCurrentLift}
         />
         <InputField
-          label="Platforms"
+          label={t("competition.platforms")}
           type="number"
           min={1}
           max={12}
@@ -92,7 +104,7 @@ export function CompetitionSettings(): React.JSX.Element {
           onChange={handlePlatformCountChange}
         />
         <InputField
-          label="Flights"
+          label={t("competition.flights")}
           type="number"
           min={1}
           max={26}
@@ -100,15 +112,15 @@ export function CompetitionSettings(): React.JSX.Element {
           onChange={handleFlightCountChange}
         />
         <SelectField
-          label="Active Platform"
+          label={t("competition.activePlatform")}
           value={activePlatform}
-          options={toSelectOptions(platforms)}
+          options={toPlatformSelectOptions(platforms, locale)}
           onValueChange={setActivePlatform}
         />
         <SelectField
-          label="Active Flight"
+          label={t("competition.activeFlight")}
           value={activeFlight}
-          options={toSelectOptions(flights)}
+          options={toFlightSelectOptions(flights, locale)}
           onValueChange={setActiveFlight}
         />
       </div>

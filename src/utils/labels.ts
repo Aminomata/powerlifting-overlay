@@ -1,3 +1,6 @@
+import { t } from "../i18n/translate";
+import type { Locale } from "../i18n/types";
+
 const FLIGHT_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export function buildPlatformLabels(count: number): string[] {
@@ -15,4 +18,34 @@ export function clampLabel(value: string, options: string[]): string {
     return value;
   }
   return options[0] ?? value;
+}
+
+export function formatPlatformLabel(stored: string, locale: Locale): string {
+  const match = /^Platform\s+(\d+)$/i.exec(stored.trim());
+  if (match) {
+    return t(locale, "platform", { n: match[1] });
+  }
+  return stored;
+}
+
+export function formatFlightLabel(stored: string, locale: Locale): string {
+  const match = /^Flight\s+([A-Z0-9]+)$/i.exec(stored.trim());
+  if (match) {
+    return t(locale, "flight", { letter: match[1].toUpperCase() });
+  }
+  return stored;
+}
+
+export function toPlatformSelectOptions(
+  values: string[],
+  locale: Locale,
+): { value: string; label: string }[] {
+  return values.map((value) => ({ value, label: formatPlatformLabel(value, locale) }));
+}
+
+export function toFlightSelectOptions(
+  values: string[],
+  locale: Locale,
+): { value: string; label: string }[] {
+  return values.map((value) => ({ value, label: formatFlightLabel(value, locale) }));
 }

@@ -86,6 +86,7 @@ export function createSampleCompetitionState(): CompetitionState {
     activeAthleteId: athletes[0]?.id ?? null,
     currentAttemptNumber: 1,
     isOverlayVisible: true,
+    locale: "en",
   };
 }
 

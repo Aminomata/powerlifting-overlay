@@ -1,12 +1,20 @@
 import { Check, ChevronLeft, ChevronRight, Eye, EyeOff, SkipBack, SkipForward, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useT } from "../../i18n";
 import { useCompetitionStore } from "../../store/useCompetitionStore";
-import { ATTEMPT_STATUS_LABELS } from "../../types/athlete";
+import type { AttemptStatus } from "../../types/athlete";
 import { currentAttempt, formatWeight } from "../../utils/liftingLogic";
 import { AdminPanel } from "./AdminPanel";
 import { InputField } from "./FormFields";
 
+const STATUS_KEYS: Record<AttemptStatus, "status.pending" | "status.goodLift" | "status.noLift"> = {
+  pending: "status.pending",
+  goodLift: "status.goodLift",
+  noLift: "status.noLift",
+};
+
 export function LiveDeck(): React.JSX.Element {
+  const t = useT();
   const athletes = useCompetitionStore((s) => s.athletes);
   const activeAthleteId = useCompetitionStore((s) => s.activeAthleteId);
   const currentLift = useCompetitionStore((s) => s.currentLift);
@@ -29,26 +37,28 @@ export function LiveDeck(): React.JSX.Element {
 
   return (
     <AdminPanel
-      title="Live Control"
+      title={t("live.title")}
       action={
         <Button variant="outline" size="sm" onClick={toggleOverlayVisible}>
           {isOverlayVisible ? <EyeOff data-icon="inline-start" /> : <Eye data-icon="inline-start" />}
-          {isOverlayVisible ? "Hide Overlay" : "Show Overlay"}
+          {isOverlayVisible ? t("live.hideOverlay") : t("live.showOverlay")}
         </Button>
       }
       contentClassName="grid gap-3"
     >
       <div className="rounded-lg border border-border bg-muted/40 p-3">
-        <div className="text-xs tracking-[0.14em] text-muted-foreground uppercase">Active Athlete</div>
-        <div className="mt-1 text-lg font-bold">{athlete ? `${athlete.firstName} ${athlete.lastName}` : "None"}</div>
+        <div className="text-xs tracking-[0.14em] text-muted-foreground uppercase">{t("live.activeAthlete")}</div>
+        <div className="mt-1 text-lg font-bold">
+          {athlete ? `${athlete.firstName} ${athlete.lastName}` : t("live.none")}
+        </div>
         <div className="text-sm text-muted-foreground">
-          {athlete ? `${athlete.weightClass} · ${athlete.club}` : "Select an athlete"}
+          {athlete ? `${athlete.weightClass} · ${athlete.club}` : t("live.selectAthlete")}
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <InputField
-          label={`Bar Weight (Attempt ${currentAttemptNumber})`}
+          label={t("live.barWeight", { n: currentAttemptNumber })}
           type="number"
           step="0.5"
           disabled={!athlete}
@@ -56,9 +66,9 @@ export function LiveDeck(): React.JSX.Element {
           onChange={handleWeightChange}
         />
         <div className="grid gap-1.5">
-          <div className="text-xs leading-none font-medium text-muted-foreground">Current Status</div>
+          <div className="text-xs leading-none font-medium text-muted-foreground">{t("live.currentStatus")}</div>
           <output className="flex h-8 items-center rounded-lg border border-border bg-muted/40 px-2.5 tabular-nums">
-            {attempt ? `${ATTEMPT_STATUS_LABELS[attempt.status]} · ${formatWeight(attempt.weight)}` : "—"}
+            {attempt ? `${t(STATUS_KEYS[attempt.status])} · ${formatWeight(attempt.weight)}` : "—"}
           </output>
         </div>
       </div>
@@ -71,7 +81,7 @@ export function LiveDeck(): React.JSX.Element {
           className="bg-success font-bold text-success-foreground hover:bg-success/85"
         >
           <Check data-icon="inline-start" />
-          {ATTEMPT_STATUS_LABELS.goodLift}
+          {t("status.goodLift")}
         </Button>
         <Button
           size="lg"
@@ -80,22 +90,22 @@ export function LiveDeck(): React.JSX.Element {
           className="bg-destructive font-bold text-destructive-foreground hover:bg-destructive/85"
         >
           <X data-icon="inline-start" />
-          {ATTEMPT_STATUS_LABELS.noLift}
+          {t("status.noLift")}
         </Button>
         <Button variant="outline" size="lg" disabled={currentAttemptNumber <= 1} onClick={goToPreviousAttempt}>
           <ChevronLeft data-icon="inline-start" />
-          Previous Attempt
+          {t("live.previousAttempt")}
         </Button>
         <Button variant="outline" size="lg" disabled={currentAttemptNumber >= 3} onClick={goToNextAttempt}>
-          Next Attempt
+          {t("live.nextAttempt")}
           <ChevronRight data-icon="inline-end" />
         </Button>
         <Button variant="secondary" size="lg" onClick={goToPreviousAthlete}>
           <SkipBack data-icon="inline-start" />
-          Previous Athlete
+          {t("live.previousAthlete")}
         </Button>
         <Button variant="secondary" size="lg" onClick={goToNextAthlete}>
-          Next Athlete
+          {t("live.nextAthlete")}
           <SkipForward data-icon="inline-end" />
         </Button>
       </div>

@@ -75,6 +75,8 @@ pub struct CompetitionState {
     pub active_athlete_id: Option<String>,
     pub current_attempt_number: u8,
     pub is_overlay_visible: bool,
+    #[serde(default = "default_locale")]
+    pub locale: String,
 }
 
 fn default_platforms() -> Vec<String> {
@@ -83,6 +85,10 @@ fn default_platforms() -> Vec<String> {
 
 fn default_flights() -> Vec<String> {
     vec!["Flight A".to_string(), "Flight B".to_string()]
+}
+
+fn default_locale() -> String {
+    "en".to_string()
 }
 
 impl Default for CompetitionState {
@@ -115,6 +121,7 @@ impl CompetitionState {
             active_athlete_id,
             current_attempt_number: 1,
             is_overlay_visible: true,
+            locale: default_locale(),
         }
     }
 

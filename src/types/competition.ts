@@ -1,8 +1,10 @@
 import type { Athlete } from "./athlete";
+import { DEFAULT_LOCALE, type Locale } from "../i18n/types";
 import { buildFlightLabels, buildPlatformLabels } from "../utils/labels";
 
 export type LiftType = "squat" | "bench" | "deadlift";
 export type CompetitionFormat = "sbd" | "benchOnly";
+export type { Locale };
 
 export interface CompetitionState {
   competitionName: string;
@@ -16,27 +18,12 @@ export interface CompetitionState {
   activeAthleteId: string | null;
   currentAttemptNumber: number;
   isOverlayVisible: boolean;
+  locale: Locale;
 }
-
-export const LIFT_LABELS: Record<LiftType, string> = {
-  squat: "Squat",
-  bench: "Bench Press",
-  deadlift: "Deadlift",
-};
-
-export const LIFT_SHORT: Record<LiftType, string> = {
-  squat: "SQUAT",
-  bench: "BENCH",
-  deadlift: "DEADLIFT",
-};
-
-export const FORMAT_LABELS: Record<CompetitionFormat, string> = {
-  sbd: "SBD",
-  benchOnly: "Bench only",
-};
 
 export const DEFAULT_PLATFORMS = buildPlatformLabels(2);
 export const DEFAULT_FLIGHTS = buildFlightLabels(2);
+export { DEFAULT_LOCALE };
 
 export const OBS_OVERLAY_URL = "http://localhost:4567/#/overlay";
 

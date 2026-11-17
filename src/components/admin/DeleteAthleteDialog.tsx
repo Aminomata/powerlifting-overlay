@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useT } from "../../i18n";
 import type { Athlete } from "../../types/athlete";
 
 interface DeleteAthleteDialogProps {
@@ -17,7 +18,8 @@ interface DeleteAthleteDialogProps {
 }
 
 export function DeleteAthleteDialog({ athlete, onCancel, onConfirm }: DeleteAthleteDialogProps): React.JSX.Element {
-  const athleteName = athlete ? `${athlete.firstName} ${athlete.lastName}` : "This athlete";
+  const t = useT();
+  const athleteName = athlete ? `${athlete.firstName} ${athlete.lastName}` : t("deleteAthlete.thisAthlete");
 
   function handleOpenChange(nextOpen: boolean): void {
     if (!nextOpen) {
@@ -35,15 +37,13 @@ export function DeleteAthleteDialog({ athlete, onCancel, onConfirm }: DeleteAthl
     <AlertDialog open={athlete !== null} onOpenChange={handleOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete athlete?</AlertDialogTitle>
-          <AlertDialogDescription>
-            {athleteName} will be removed from the start list. This cannot be undone.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{t("deleteAthlete.title")}</AlertDialogTitle>
+          <AlertDialogDescription>{t("deleteAthlete.body", { name: athleteName })}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("deleteAthlete.cancel")}</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={handleConfirm}>
-            Delete
+            {t("deleteAthlete.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

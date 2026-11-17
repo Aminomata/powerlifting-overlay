@@ -1,6 +1,11 @@
 import type { CompetitionState } from "../types/competition";
 
-const API_ORIGIN = "http://localhost:4567";
+function apiOrigin(): string {
+  if (typeof window !== "undefined" && window.location.origin && window.location.origin !== "null") {
+    return window.location.origin;
+  }
+  return "http://localhost:4567";
+}
 
 export type StateListener = (state: CompetitionState) => void;
 
